@@ -1,0 +1,18 @@
+# Mac
+.DS_Store
+hooks
+.svn
+
+# iOS
+platforms/ios/build/
+platforms/ios/www/
+platforms/ios/cordova/console.log
+platforms/ios/CordovaLib/build
+*.xcuserdatad
+
+# android
+platforms/android/build
+platforms/android/.gradle
+platforms/android/.idea
+platforms/android/CordovaLib/build
+platforms/android/assets/www
