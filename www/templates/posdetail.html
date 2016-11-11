@@ -1,0 +1,132 @@
+<ion-view view-title="{{ title }}">
+
+        <ion-nav-buttons side="left">
+            <a ng-click="$ionicGoBack()" nav-transition="none" class="button back-button button-clear header-item">
+                <i class="icon ion-ios-arrow-thin-left"></i>
+            </a>
+        </ion-nav-buttons>
+
+        <ion-nav-buttons side="right">
+            <button ng-click="changeCustom()" class="button button-clear">
+                <i class="icon ion-ios-star" ng-show="iscustom"></i>
+                <i class="icon ion-ios-star-outline" ng-hide="iscustom"></i>
+            </button>
+        </ion-nav-buttons>
+
+    <ion-content class="posdetail" scroll='false'>
+
+        <div class="list">
+            <div class="item detail" >
+                <div class="row">
+                    <div class="col detail_msg" ></div>
+                    <!-- <div class="col">
+                        看<span class="direction"></span>持仓<span class="volume"></span>手
+                    </div>
+                    <div class="col">浮动盈亏</div>
+                    <div class="col float_profit"></div> -->
+                    <div class="col col-10" align="right" ng-click="select_other_pos()">
+                        <i class="icon ion-arrow-down-b"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="item quote">
+                <div class="row row-bottom">
+                    <div class="col largeFont last_price" align="right">&nbsp;</div>
+                    <div class="col updown" align="center">&nbsp;</div>
+                    <div class="col updown_percent">&nbsp;</div>
+                </div>
+            </div>
+            <div class="item quote">
+                <div class="row">
+                    <div class="col">买价</div>
+                    <div class="col bid_price1" align="right"></div>
+                    <div class="col col-offset-10">卖价</div>
+                    <div class="col ask_price1" align="right"></div>
+                </div>
+            </div>
+            <div class="item quote">
+                <div class="row row-bottom">
+                    <div class="col">买量</div>
+                    <div class="col bid_volume1" align="right"></div>
+                    <div class="col col-offset-10">卖量</div>
+                    <div class="col ask_volume1" align="right"></div>
+                </div>
+            </div>
+            <div class="item quote">
+                <div class="row row-bottom">
+                    <div class="col">最高</div>
+                    <div class="col highest" align="right"></div>
+                    <div class="col col-offset-10">最低</div>
+                    <div class="col lowest" align="right"></div>
+                </div>
+            </div>
+            <div class="item quote">
+                <div class="row row-bottom">
+                    <div class="col ">涨停</div>
+                    <div class="col upper_limit" align="right"></div>
+                    <div class="col col-offset-10">跌停</div>
+                    <div class="col lower_limit" align="right"></div>
+                </div>
+            </div>
+            <div class="item quote">
+                <div class="row row-bottom">
+                    <div class="col">开盘</div>
+                    <div class="col open" align="right"></div>
+                    <div class="col col-offset-10">收盘</div>
+                    <div class="col close" align="right"></div>
+                </div>
+            </div>
+            <div class="item quote">
+                <div class="row row-bottom">
+                    <div class="col">成交</div>
+                    <div class="col volume" align="right"></div>
+                    <div class="col col-offset-10">持仓</div>
+                    <div class="col open_interest" align="right"></div>
+                </div>
+            </div>
+            <div class="item quote">
+                <div class="row row-bottom">
+                    <div class="col">昨收</div>
+                    <div class="col pre_close" align="right"></div>
+                    <div class="col col-offset-10">均价</div>
+                    <div class="col average" align="right"></div>
+                </div>
+            </div>
+            <div class="item quote">
+                <div class="row row-bottom">
+                    <div class="col col-60  item-input-inset">
+                        <label class="item-input-wrapper">
+                            <input type="number" placeholder="下单手数(默认1手)" name="hands" data-ng-model="makeorder.hands">
+                        </label>
+                        <label class="item-input-wrapper">
+                            <input type="number" placeholder="下单价格(默认市价)" name="price" data-ng-model="makeorder.price">
+                        </label>
+                    </div>
+                    <div class="col col-20" align="right">
+                        <button class="button button-small button-block button-calm" ng-click="insert_order('BUY')">
+                            <span>买进</span><br/>
+                            <span>{{ makeorder.price==undefined?'市价':makeorder.price }}</span>
+                        </button>
+                    </div>
+                    <div class="col col-20" align="right">
+                        <button class="button button-small button-block button-assertive" ng-click="insert_order('SELL')">
+                            卖出<br/>{{ makeorder.price==undefined?'市价':makeorder.price }}
+                        </button>
+                    </div>
+                    <div class="col col-20" align="right" style="display: none;">
+                        <button class="button button-small button-block button-energized" ng-click="insert_order('STOP')">
+                            止损<br/>{{ makeorder.price==undefined?'市价':makeorder.price }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <ion-scroll direction="x" style="width:100%;" has-bouncing='false' cal-height>
+            <!--cal-height-->
+            <div class="pos-boxes">
+                <!--<div class="pos-box red" ng-repeat="i in [1,2,3,4,5]">3442<br/>买加仓5手</div>-->
+                <!--<div class="pos-box green">3442<br/>买加仓5手</div>-->
+            </div>
+        </ion-scroll>
+    </ion-content>
+</ion-view>

@@ -1,19 +1,15 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.xinyi.hello" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Demo</name>
+<widget id="com.zhongqihuo" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>zhongqihuo</name>
     <description>
-        A sample Apache Cordova application that responds to the deviceready event.
+        期货交易软件
     </description>
-    <author email="dev@cordova.apache.org" href="http://cordova.io">
-        Apache Cordova Team
+    <author email="mayanqiong@shinnytech.com" href="http://zhongqijiaoyi.com">
+        上海信易信息科技有限公司
     </author>
-    <!-- brokerId 期货公司代码 -->
-    <content src="https://appficaos.cfmmc.com/indexnew?brokerId=0152&openType=9&checkBrokerIdFlag=false" />
-    <!-- <content src="http://www.tuicool.com/" /> -->
-    <plugin name="cordova-plugin-whitelist" spec="1" />
-    <access origin="*" />
+    <content src="index.html" />
     <allow-navigation href="https://appficaos.cfmmc.com/*" />
-
+    <access allows-arbitrary-loads-in-media="true" allows-arbitrary-loads-in-web-content="true" allows-local-networking="true" origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />
@@ -22,9 +18,43 @@
     <allow-intent href="geo:*" />
     <platform name="android">
         <allow-intent href="market:*" />
+        <icon density="ldpi" src="res/icon/android/ldpi.png" />
+        <icon density="mdpi" src="res/icon/android/mdpi.png" />
+        <icon density="hdpi" src="res/icon/android/hdpi.png" />
+        <icon density="xhdpi" src="res/icon/android/xhdpi.png" />
+        <icon density="xxhdpi" src="res/icon/android/xxhdpi.png" />
+        <icon density="xxxhdpi" src="res/icon/android/xxxhdpi.png" />
+        <splash density="port-ldpi" src="res/screen/android/splash-port-ldpi.png" />
+        <splash density="port-mdpi" src="res/screen/android/splash-port-mdpi.png" />
+        <splash density="port-hdpi" src="res/screen/android/splash-port-hdpi.png" />
+        <splash density="port-xhdpi" src="res/screen/android/splash-port-xhdpi.png" />
+        <splash density="port-xxhdpi" src="res/screen/android/splash-port-xxhdpi.png" />
+        <splash density="port-xxxhdpi" src="res/screen/android/splash-port-xxxhdpi.png" />
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
     </platform>
+    <hook src="scripts/beforeBuild.js" type="before_build" />
+    <hook src="scripts/afterBuild.js" type="after_build" />
+    <preference name="Orientation" value="portrait" />
+    <preference name="webviewbounce" value="false" />
+    <preference name="UIWebViewBounce" value="false" />
+    <preference name="DisallowOverscroll" value="true" />
+    <preference name="SplashScreenDelay" value="2000" />
+    <preference name="FadeSplashScreenDuration" value="2000" />
+    <preference name="android-minSdkVersion" value="16" />
+    <preference name="BackupWebStorage" value="none" />
+    <preference name="SplashScreen" value="screen" />
+    <feature name="StatusBar">
+        <param name="ios-package" onload="true" value="CDVStatusBar" />
+    </feature>
+    <plugin name="cordova-plugin-whitelist" spec="1" />
+    <plugin name="cordova-plugin-camera" spec="~2.3.0" />
+    <plugin name="cordova-plugin-statusbar" spec="~2.2.0" />
+    <plugin name="cordova-plugin-x-toast" spec="~2.5.2" />
+    <plugin name="cordova-plugin-dialogs" spec="~1.3.0" />
+    <plugin name="com.cordova.plugin.AnyChatPlugin" spec="/Users/yanqiong/Downloads/CordovaPlugins/cordova-anychat" />
+    <plugin name="com.cordova.plugin.CertPlugin" spec="/Users/yanqiong/Downloads/CordovaPlugins/cordova-cert" />
+    <engine name="android" spec="~6.0.0" />
 </widget>

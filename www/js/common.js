@@ -333,8 +333,7 @@ function checkVersion(clientId, versionCode) {
 	if($$('#version').length != 0){
 		$$('#version').html("<p class='title' style='text-align:center'>Version:"+versionCode+"</p>");		
 	}
-	$$
-			.ajax({
+	$$.ajax({
 				timeout:15000,
 				url : '/checkVersion.do?rnd=' + new Date().getTime(),
 				type : 'POST',
