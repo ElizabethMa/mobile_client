@@ -1,7 +1,6 @@
 
 
 (function(){
-	var datas = {};
 	var root_node, current_node;
 
 	function merge_object(target, source){
@@ -62,7 +61,7 @@
 
 	function dm_update_data(diff){
 		//将diff中所有数据更新到datas中
-		merge_object(datas, diff);
+		merge_object(DM.datas, diff);
 		//将diff中所有数据涉及的node设置invalid标志
 		iterator_object("", diff, function(path, obj){
 			check_invalid(path, root_node);
@@ -110,7 +109,7 @@
 		current_node.relations.push("." + path);
 		//取数据
 		var keys = path.split(".");
-		var d = datas;
+		var d = DM.datas;
 		for(var i=0;i<keys.length;i++){
 			d = d[keys[i]]
 			if (d==undefined)
@@ -121,11 +120,14 @@
 
 	function dm_clear_data(){
 		// 清空数据
-		datas = {};
+		var state = DM.datas.state;
+		DM.datas = {
+			state: state
+		};
 	}
 
 	this.DM = {
-		datas : datas,
+		datas : {},
 		init : dm_init,
 		run : dm_run,
 		get_data : dm_get,

@@ -9835,7 +9835,8 @@ a.button {
 
 .ionic_datepicker_popup .item,
 .ionic_datepicker_popup .item select {
-  background-color: #fff; }
+  background-color: #fff;
+  color: #000; }
 
 ion-modal-view.login ion-content,
 ion-modal-view.changepwd ion-content,
@@ -9982,15 +9983,31 @@ ion-modal-view.login ion-content.act .footer {
   ion-modal-view.login ion-content.act .footer a {
     color: #8fd1f7; }
 
-ion-modal-view.login ion-content .content a {
-  font-size: 16px; }
-
-ion-modal-view.login ion-content .content .list {
-  margin: 10px 0px; }
-
-ion-modal-view.login ion-content .content .item {
-  border: none;
-  padding: 10px 0px; }
+ion-modal-view.login ion-content .content {
+  margin: 0px 30px;
+  heigth: 100%; }
+  ion-modal-view.login ion-content .content a {
+    font-size: 16px; }
+  ion-modal-view.login ion-content .content .list {
+    margin: 4px 0px; }
+  ion-modal-view.login ion-content .content .item {
+    border: none;
+    padding: 4px 0px; }
+  ion-modal-view.login ion-content .content .logo {
+    padding-top: 20px;
+    width: 40px; }
+  ion-modal-view.login ion-content .content h3 {
+    margin-top: 0px;
+    margin-bottom: 4px; }
+  ion-modal-view.login ion-content .content .row {
+    padding: 0px; }
+  ion-modal-view.login ion-content .content input {
+    color: #fff;
+    background-color: transparent; }
+  ion-modal-view.login ion-content .content button {
+    border-radius: 25px; }
+  ion-modal-view.login ion-content .content .list.error {
+    color: #F33; }
 
 /*changepwd*/
 ion-modal-view.changepwd ion-content.sim .content span.input-label {

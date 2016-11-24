@@ -1,19 +1,11 @@
-<ion-view view-title="{{ title }}">
-
-        <ion-nav-buttons side="left">
-            <a ng-click="$ionicGoBack()" nav-transition="none" class="button back-button button-clear header-item">
-                <i class="icon ion-ios-arrow-thin-left"></i>
-            </a>
-        </ion-nav-buttons>
-
-        <ion-nav-buttons side="right">
-            <button ng-click="changeCustom()" class="button button-clear">
-                <i class="icon ion-ios-star" ng-show="iscustom"></i>
-                <i class="icon ion-ios-star-outline" ng-hide="iscustom"></i>
-            </button>
-        </ion-nav-buttons>
-
-    <ion-content class="posdetail" scroll='false'>
+<ion-view view-title="{{ins_id}}">
+    <ion-nav-buttons side="right">
+        <button ng-click="changeCustom()" class="button button-clear">
+            <i class="icon ion-ios-star" ng-show="iscustom"></i>
+            <i class="icon ion-ios-star-outline" ng-hide="iscustom"></i>
+        </button>
+    </ion-nav-buttons>
+    <ion-content class="posdetail">
 
         <div class="list">
             <div class="item detail" >
@@ -103,13 +95,13 @@
                         </label>
                     </div>
                     <div class="col col-20" align="right">
-                        <button class="button button-small button-block button-calm" ng-click="insert_order('BUY')">
+                        <button class="button button-small button-block button-assertive" ng-click="insert_order('BUY')">
                             <span>买进</span><br/>
                             <span>{{ makeorder.price==undefined?'市价':makeorder.price }}</span>
                         </button>
                     </div>
                     <div class="col col-20" align="right">
-                        <button class="button button-small button-block button-assertive" ng-click="insert_order('SELL')">
+                        <button class="button button-small button-block button-balanced" ng-click="insert_order('SELL')">
                             卖出<br/>{{ makeorder.price==undefined?'市价':makeorder.price }}
                         </button>
                     </div>

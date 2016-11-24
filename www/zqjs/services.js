@@ -21,6 +21,50 @@ angular.module('starter.services', [])
 						return status;
 					});
 				return promise;
+			},
+			bank_account: function () {
+				var _baseUrl = SETTING.server_base_url;
+				var promise = $http({
+					method: 'GET',
+					url: _baseUrl + '/t/'+localStorage.getItem('broker_id')+'/accounts/'+localStorage.getItem('account_id')+'/bank/list',
+				})
+					.success(function (response) {
+						return response;
+					}).error(function (response, status) {
+						console.log("response:" + response + ",status:" + status);
+						return status;
+					});
+				return promise;
+			},
+			bank_balance: function (bank_id, bank_password) {
+				var _baseUrl = SETTING.server_base_url;
+				var promise = $http({
+					method: 'GET',
+					url: _baseUrl + '/t/'+localStorage.getItem('broker_id')+'/accounts/'+localStorage.getItem('account_id')
+					+'/bank/account?bank_id='+bank_id+'&bank_password='+bank_password,
+				})
+					.success(function (response) {
+						return response;
+					}).error(function (response, status) {
+						console.log("response:" + response + ",status:" + status);
+						return status;
+					});
+				return promise;
+			},
+			future_balance: function (bank_id, bank_password) {
+				var _baseUrl = SETTING.server_base_url;
+				var promise = $http({
+					method: 'GET',
+					url: _baseUrl + '/t/'+localStorage.getItem('broker_id')+'/accounts/'+localStorage.getItem('account_id')
+					+'/bank/future_account',
+				})
+					.success(function (response) {
+						return response;
+					}).error(function (response, status) {
+						console.log("response:" + response + ",status:" + status);
+						return status;
+					});
+				return promise;
 			}
 		}
 		return queryService;

@@ -7,7 +7,7 @@ var test_wss_url = "wss://www.easyqh.com/ws/";
 var SETTING = {
 	server_base_url: 'http://' + DOMAIN,
 	sim_server_url: 'ws://' + DOMAIN + '/t/sim/front/mobile',
-	act_server_url: 'ws://' + DOMAIN + '/t/act/front/mobile',
+	act_server_url: 'ws://' + DOMAIN + '/t/dfqh/front/mobile',
 
 	posdetail_cellwidth: 100,
 	posdetail_cellheight: 60
@@ -25,7 +25,7 @@ var CONST = {
 
 
 	// 账户持仓d
-	positions_account: ['balance','using','available','risk_ratio','position_volume','float_profit'],
+	positions_account: ['balance','using','available','risk_ratio','position_volume','float_profit','status'],
 	positions_attrs: ['last_price','volume','float_profit','open_price','pending_open_volume','frozen_volume','margin'],
 //	positions_attrs: [
 //		{id:'position_id', name: '持仓代码'},

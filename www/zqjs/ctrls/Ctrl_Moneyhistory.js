@@ -38,7 +38,6 @@ Ctrls.controller('MoneyhistoryCtrl',
 			var parser = datetime("yyyyMMdd");
 			parser.setDate($scope.opendate);
 			var dstart = parser.getText();
-
 			parser.setDate($scope.enddate);
 			var dend = parser.getText();
 
@@ -71,13 +70,7 @@ Ctrls.controller('MoneyhistoryCtrl',
 					$scope.enddate = new Date(val);
 				}
 				console.log('Return value is : ' + val, new Date(val));
-			},
-			disabledDates: [],
-			inputDate: new Date(),      //Optional
-			mondayFirst: true,          //Optional
-			disableWeekdays: [0,6],       //Optional
-			closeOnSelect: false,       //Optional
-			templateType: 'popup'       //Optional
+			}
 		};
 
 

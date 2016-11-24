@@ -707,7 +707,8 @@ function isChinese(str) {
 }
 // 用户名是否只由汉字、字母、数字
 function isUserName(str) {
-	var reg = /^[0-9a-za-z\u4e00-\u9fa5]+$/;
+	//var reg = /^[0-9a-za-z\u4e00-\u9fa5]+$/;
+	var reg = /^[\u4e00-\u9fa5]+·?[\u4e00-\u9fa5]+$/;
 	return (reg.test(str));
 }
 // 扫描二维码登陆
@@ -777,4 +778,34 @@ function QRCodeLogin(decoderContent){
    			khApp.alert(MESSAGE_TIMEOUT); 
 		}
 	});	
+}
+
+/******************************************************************
+* 获取手机型号及版本
+*/
+function getInfo(){
+	return;
+	if (browser.versions.ios){
+		window.location.href = "objc://getIphoneInfo";
+	 }else if(browser.versions.android){
+		 jtoJHandle.getSysInfo();
+	 }else{
+		 return;
+	 }
+}
+         
+function IOSGetSysInfo(s,y){//ios回调
+	//手机型号
+	phoneType = y;
+	//手机系统版本
+	phoneVersion = s;
+	
+}
+function getSysInfo(s){//android回调
+	var arr = new Array();
+	arr = s.split(",");
+	//手机型号
+	phoneType = arr[0];
+	//手机系统版本
+	phoneVersion= arr[1];
 }

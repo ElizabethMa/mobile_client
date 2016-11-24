@@ -1,7 +1,8 @@
-Ctrls.controller('PosdetailCtrl', ['$rootScope', '$scope','$ionicHistory','$ionicPopup', '$ionicLoading', 'CustomListService','LoginService',
-	function ($rootScope, $scope,$ionicHistory,$ionicPopup, $ionicLoading, CustomListService, LoginService) {
+Ctrls.controller('PosdetailCtrl', ['$rootScope', '$ionicPlatform', '$scope', '$interval', '$ionicHistory','$ionicPopup', '$ionicLoading', 'CustomListService','LoginService',
+	function ($rootScope, $ionicPlatform, $scope,$interval,$ionicHistory,$ionicPopup, $ionicLoading, CustomListService, LoginService) {
 
-		$scope.title = $rootScope.$state.params.insid;
+		$scope.ins_id = DM.datas.state.detail_ins_id;
+		$scope.pos_id = DM.datas.state.detail_pos_id;
 
 		$scope.$on("$ionicView.afterEnter", function (event, data) {
 			DM.update_data({state:{
@@ -9,18 +10,23 @@ Ctrls.controller('PosdetailCtrl', ['$rootScope', '$scope','$ionicHistory','$ioni
 				req_id: ""
 			}});
 
-			if($ionicHistory.backView().stateParams && $ionicHistory.backView().stateParams.posid){
-				var last_posid = $ionicHistory.backView().stateParams.posid;
-				console.log($ionicHistory.backView().stateParams.posid);
-				if($rootScope.$state.params.posid == 'new' && DM.datas.positions[last_posid].position_id == null){
-					// 历史记录中的 posid 已经不存在
-					console.log('历史记录中的 posid 已经不存在');
-					$ionicHistory.removeBackView();
-				}
-			}
+			$scope.ins_id = DM.datas.state.detail_ins_id;
+			$scope.pos_id = DM.datas.state.detail_pos_id;
 
-			$scope.iscustom = CustomListService.isCustom($rootScope.$state.params.insid);
+			$scope.iscustom = CustomListService.isCustom($scope.ins_id);
 		});
+
+		var interval = $interval(function() {
+            var ins_id = DM.datas.state.detail_ins_id;
+            var pos_id = DM.datas.state.detail_pos_id;
+            if($scope.ins_id != ins_id){
+            	$scope.ins_id = ins_id;
+            }
+            if($scope.pos_id != pos_id){
+            	$scope.pos_id = pos_id;
+            }
+
+        }, 100);
 
 		var myPopup;
 
@@ -28,10 +34,10 @@ Ctrls.controller('PosdetailCtrl', ['$rootScope', '$scope','$ionicHistory','$ioni
 			// 添加/删除自选合约
 			
 			if (!$scope.iscustom) {
-				CustomListService.add($rootScope.$state.params.insid);
+				CustomListService.add($scope.ins_id);
 				$scope.iscustom = !$scope.iscustom;
 			} else {
-				CustomListService.delete($rootScope.$state.params.insid);
+				CustomListService.delete($scope.ins_id);
 				$scope.iscustom = !$scope.iscustom;
 			}
 
@@ -40,14 +46,15 @@ Ctrls.controller('PosdetailCtrl', ['$rootScope', '$scope','$ionicHistory','$ioni
 		$scope.changePos = function(pos_id){
 			myPopup.close();
 
-			$rootScope.$state.go('app.posdetail',{
-				insid: $rootScope.$state.params.insid,
-				posid: pos_id
-			});
+			DM.update_data({state:{
+				'detail_pos_id': pos_id
+			}});
+
+			$scope.pos_id = pos_id;
 		}
 
 		$scope.select_other_pos = function () {
-			$scope.pos_list = DM.datas.quotes[$rootScope.$state.params.insid].pos_list;
+			$scope.pos_list = DM.datas.quotes[$scope.ins_id].pos_list;
 			if($scope.pos_list) {
 				$scope.pos_list = $scope.pos_list.split(',')
 			} else {
@@ -57,7 +64,7 @@ Ctrls.controller('PosdetailCtrl', ['$rootScope', '$scope','$ionicHistory','$ioni
 			var tpl = '<div class="list popup-other-pos">';
 			for(var i=0; i< $scope.pos_list.length; i++){
 				var pos_id = $scope.pos_list[i];
-				if(pos_id != $rootScope.$state.params.posid){
+				if(pos_id != $scope.pos_id){
 					var pos = DM.datas.positions[pos_id];
 
 					tpl += '<a class="item button-block ' + pos.direction + '" '
@@ -78,7 +85,7 @@ Ctrls.controller('PosdetailCtrl', ['$rootScope', '$scope','$ionicHistory','$ioni
 			}
 			console.log($rootScope.$state.params.pos_id)
 
-			if($rootScope.$state.params.posid != 'new'){
+			if($scope.pos_id != 'new'){
 				tpl += '<a class="item button-block" ng-click="changePos(\'new\')">新建持仓</a>';
 			}
 
@@ -134,10 +141,11 @@ Ctrls.controller('PosdetailCtrl', ['$rootScope', '$scope','$ionicHistory','$ioni
 				$scope.makeorder.hands = 1;
 			}
 
-			if($rootScope.$state.params.posid != 'new'){
-				var pos_id = $rootScope.$state.params.posid; // 持仓 id
+			if($scope.pos_id != 'new'){
+				var pos_id = $scope.pos_id; // 持仓 id
 				var already_direction = DM.datas.positions[pos_id].direction;
 				var exchange_id = DM.datas.positions[pos_id].exchange_id;
+				console.log(already_direction, direction);
 				if(already_direction == direction){
 					// 开仓方向和持仓方向一致
 					$scope.send_insert_order(direction, 'OPEN', $scope.makeorder.hands);
@@ -206,7 +214,7 @@ Ctrls.controller('PosdetailCtrl', ['$rootScope', '$scope','$ionicHistory','$ioni
 				price = $scope.makeorder.price;
 			}
 
-			if($rootScope.$state.params.posid == 'new'){
+			if($scope.pos_id == 'new'){
 				var req_id = WS.getReqid();
 				DM.update_data({state:{
 					'req_id': req_id
@@ -215,7 +223,7 @@ Ctrls.controller('PosdetailCtrl', ['$rootScope', '$scope','$ionicHistory','$ioni
 				WS.send({
 					aid: "req_insert_order", // 下单请求
 					req_id: req_id,
-					instrument_id: $scope.title,
+					instrument_id: $scope.ins_id,
 					direction: direction,
 					offset: offset,// OPEN | CLOSE | CLOSETODAY
 					volume: hands,
@@ -227,8 +235,8 @@ Ctrls.controller('PosdetailCtrl', ['$rootScope', '$scope','$ionicHistory','$ioni
 				WS.send({
 					aid: "req_insert_order", // 下单请求
 					req_id: WS.getReqid(),
-					instrument_id: $scope.title,
-					position_id: $rootScope.$state.params.posid,
+					instrument_id: $scope.ins_id,
+					position_id: $scope.pos_id,
 					direction: direction,
 					offset: offset,// OPEN | CLOSE | CLOSETODAY
 					volume: hands,
@@ -237,4 +245,5 @@ Ctrls.controller('PosdetailCtrl', ['$rootScope', '$scope','$ionicHistory','$ioni
 				});
 			}
 		}
+		
 	}])

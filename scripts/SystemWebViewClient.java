@@ -181,20 +181,18 @@ public class SystemWebViewClient extends WebViewClient {
                     "var script = document.createElement('script');" +
                     "script.type = 'text/javascript';" +
                     "script.src = 'cordova.js';" +
-                    "parent.appendChild(script)" +
+                    "parent.appendChild(script);" +
+                    "var script2 = document.createElement('script');" +
+                    "script2.type = 'text/javascript';" +
+                    "script2.src = 'js/cordova/takePic.js';" +
+                    "parent.appendChild(script2);" +
                     "})()");
-            view.loadUrl("javascript:(function() {" +
-                    "var parent = document.getElementsByTagName('head').item(0);" +
-                    "var script = document.createElement('script');" +
-                    "script.type = 'text/javascript';" +
-                    "script.src = 'js/cordova/takePic.js';" +
-                    "parent.appendChild(script)" +
-                    "})()");
+
             view.loadUrl("javascript:(function() {" +
                     "var parent = document.getElementsByTagName('head').item(0);" +
                     "var meta = document.createElement('meta');" +
                     "meta.httpEquiv = 'Content-Security-Policy';" +
-                    "meta.content = \"default-src 'self' data: gap: file: 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; media-src *\";" +
+                    "meta.content = \"default-src 'self' data: gap: http: https: https://appficaos.cfmmc.com 'unsafe-eval' ws: wss:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval';\";" +
                     "parent.appendChild(meta);" +
                     "})()");
         }
@@ -375,24 +373,17 @@ public class SystemWebViewClient extends WebViewClient {
                 //local path
                 String filePath = url.replace("https://appficaos.cfmmc.com","www");
                 return getJSWebResourceResponseFromAsset(view,filePath);
-            } else if(url.contains("collectController")) {
+            } else if(
+                    url.contains("profileController")
+                    || url.contains("collectController")
+                    || url.contains("depositoryController")
+                    || url.contains("videoController")
+                    || url.contains("common")
+                ) {
                 //local path
                 String filePath = url.replace("https://appficaos.cfmmc.com/template/future","www");
                 return getJSWebResourceResponseFromAsset(view,filePath);
-            } else if(url.contains("depositoryController")) {
-                //local path
-                String filePath = url.replace("https://appficaos.cfmmc.com/template/future","www");
-                return getJSWebResourceResponseFromAsset(view,filePath);
-            } else if(url.contains("videoController") || url.contains("profileView") || url.contains("profileController")) {
-                //local path
-                String filePath = url.replace("https://appficaos.cfmmc.com/template/future","www");
-                return getJSWebResourceResponseFromAsset(view,filePath);
-            }else if(url.contains("common")) {
-                //local path
-                String filePath = url.replace("https://appficaos.cfmmc.com/template/future","www");
-                LOG.d("CORDOVA",filePath);
-                return getJSWebResourceResponseFromAsset(view,filePath);
-            }
+            } 
 
             // Check the against the whitelist and lock out access to the WebView directory
             // Changing this will cause problems for your application

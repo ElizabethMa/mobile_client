@@ -8,7 +8,7 @@ function addClassName(className, newValue){
 	if(arr.indexOf(newValue) == -1){
 		for(var i=0; i<rules.length; i++){
 			if(rules[i].indexOf(newValue) > -1){
-				for(var j=0; j<rules[i].length && rules[i][j] != newValue; j++){
+				for(var j=0; j<rules[i].length; j++){
 					if(arr.indexOf(rules[i][j]) > -1){
 						arr.splice(arr.indexOf(rules[i][j]), 1);
 					}

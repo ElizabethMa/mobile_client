@@ -103,3 +103,11 @@ $ cordova prepare && cordova build android
 
 1. ionic.bundle.js 不要换成 ionic.bundle.min.js
 fix blink : line#57952 改过
+
+## 生成秘钥 
+
+记住密码填在 build.json
+
+```
+keytool -genkey -v -keystore zhongqihuo-key.jks -keyalg RSA -keysize 2048 -validity 1000000 -alias zhongqihuo-release
+```

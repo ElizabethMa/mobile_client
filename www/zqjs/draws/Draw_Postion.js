@@ -1,9 +1,6 @@
 function draw_page_position() {
-	if (DM.get_data("state.page") == "positions" && DM.get_data("account_id")) {
-		var arr = location.hash.split('/');
-		if(arr.indexOf('position') < 0){
-			return;
-		}
+	if (DM.get_data("state.page") == "positions") {
+		
 		for (var i = 0; i < CONST.positions_account.length; i++) {
 			DM.run(function (p) {
 				return function () {
@@ -11,6 +8,7 @@ function draw_page_position() {
 				};
 			}(CONST.positions_account[i]));
 		}
+
 		DM.run(draw_page_position_list);
 	}
 }
@@ -18,17 +16,38 @@ function draw_page_position() {
 function draw_page_position_account(param) {
 	var div = document.querySelector('.pos_container .account_info .' + param);
 	var val = DM.get_data(param);
-	if(val && div){
-		var arr = val.split('|');
-		if (arr[1]) {
-			div.className = addClassName(div.className, arr[1]);
+	if(param == 'status'){
+		//"ACTIVE"|"NOTICE"|"CLOSEONLY"|"DISABLED"
+		if(val == 'NOTICE'){
+			div.className = 'col status';
+			div.innerText = '账户状态异常，有系统未处理报单';
+		}else if(val == 'CLOSEONLY'){
+			div.className = 'col status';
+			div.innerText = '账户状态异常，只能平仓操作';
+		}else if(val == 'DISABLED'){
+			div.className = 'col status';
+			div.innerText = '账户状态异常，不能进行操作';
+		}else {
+			div.className = 'col status hidden';
 		}
-		div.innerText = arr[0];
+	} else {
+		if(val && div){
+			var arr = val.split('|');
+			if (arr[1]) {
+				div.className = addClassName(div.className, arr[1]);
+			}
+			div.innerText = arr[0];
+		}
 	}
+	
 }
 
 function page_to_posdetail(insid, posid) {
-	location.href = "#/app/posdetail/" + insid + '/' + posid;
+	DM.update_data({state:{
+		detail_ins_id : insid,
+		detail_pos_id : posid
+	}});
+	location.href = "#/app/posdetail";
 }
 
 function draw_page_position_list() {
@@ -39,6 +58,7 @@ function draw_page_position_list() {
 	if (poslist) {
 		posArr = Object.getOwnPropertyNames(poslist);
 	}else{
+		container.innerHTML = "";
 		return;
 	}
 
@@ -53,10 +73,13 @@ function draw_page_position_list() {
 			}
 			continue;
 		}
+
+		var p = poslist[posArr[i]];
+		// 持仓没有了
+		if(p.position_id == null){ continue;}
+		
 		if (document.querySelectorAll('.pos_container .pos_list .pos_' + posArr[i]).length == 0) {
-			var p = poslist[posArr[i]];
-			// 持仓没有了
-			if(p.position_id == null){ continue;}
+			
 			strHtml = '<div class="list card pos_' + posArr[i] + '">';
 			strHtml += '<a class="item item-divider" onclick="page_to_posdetail(\'' + p.instrument_id + '\',\'' + posArr[i] + '\')">';
 			strHtml += '<div class="row">';
@@ -119,6 +142,14 @@ function draw_page_position_list() {
 			strHtml += '</div></a></div>';
 			container.innerHTML += strHtml;
 		} else {
+			var ins_id = p.instrument_id;
+
+			DM.run(function (pos_id, ins_id) {
+				return function () {
+					draw_page_position_lastprice(pos_id, ins_id)
+				};
+			}(posArr[i], ins_id));
+
 			DM.run(function (pos_id) {
 				return function () {
 					draw_page_position_content(pos_id)
@@ -127,6 +158,21 @@ function draw_page_position_list() {
 		}
 	}
 
+}
+
+function draw_page_position_lastprice(pos_id, ins_id){
+	var val = DM.get_data('quotes.' + ins_id + '.last_price');
+
+	var classNameStr = '.pos_container .pos_list .pos_' + pos_id + ' .last_price';
+	var div = document.querySelector(classNameStr);
+
+	if (div && val) {
+		var arr = val.split('|');
+		if (arr[1]) {
+			div.classNmae = addClassName(div.className, arr[1]);
+		}
+		div.innerText = arr[0];
+	}
 }
 
 function draw_page_position_content(pos_id) {

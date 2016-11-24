@@ -64,20 +64,11 @@ Ctrls.controller('TransactionCtrl',
 					$scope.enddate = new Date(val);
 				}
 				console.log('Return value is : ' + val, new Date(val));
-			},
-			disabledDates: [],
-			inputDate: new Date(),      //Optional
-			mondayFirst: true,          //Optional
-			disableWeekdays: [0,6],       //Optional
-			closeOnSelect: false,       //Optional
-			templateType: 'popup'       //Optional
+			}
 		};
 
 
 		$scope.openDatePicker = function(type){
-			if(cordova.plugins.Keyboard.isVisible){
-				cordova.plugins.Keyboard.close();
-			}
 			
 			$scope.selectDateModal = type;
 			console.log($scope.selectDateModal)

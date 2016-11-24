@@ -153,6 +153,15 @@
     color: #0f0;
 }
 
+.pos_container .col.status{
+    background-color: #f00;
+    color: #fff;
+}
+
+.pos_container .col.status.hidden{
+    display: none;
+}
+
 .pos_container .col-offset-4 {
     margin-left: 2%;
 }
@@ -286,6 +295,10 @@ table.quote td {
     white-space: nowrap;
     overflow:hidden;
     color: #fff;
+}
+
+table.quote td:after {
+    content: attr(data-content);
 }
 
 table.quote td:not(:first-child){

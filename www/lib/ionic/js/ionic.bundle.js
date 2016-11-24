@@ -54678,7 +54678,21 @@ function($rootScope, $state, $location, $document, $ionicPlatform, $ionicHistory
       backView.go();
     } else {
       // there is no back view, so close the app instead
-      ionic.Platform.exitApp();
+      // ionic.Platform.exitApp();
+      // 
+      navigator.notification.confirm(
+        '退出众期货应用?',
+        function(buttonIndex) {
+          if (buttonIndex == 1) {
+            ionic.Platform.exitApp();
+          } else {
+            return;
+          }
+        },
+        '退出',         
+        ['退出','取消']  
+      );
+
     }
     e.preventDefault();
     return false;

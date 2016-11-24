@@ -5,23 +5,30 @@
                 <div class="input-label">
                     银行账号
                 </div>
-                <select>
-                    <option>工商银行 6222***6789</option>
-                    <option selected>建设银行 6222***1234</option>
+                <select id="bank_list">
+
+                    <option ng-repeat="bank in banklist" id="{{bank.bank_id}}">
+                        {{ bank.bank_name }} {{ bank.bank_account }}
+                    </option>
+                    <!-- <option>工商银行 6222***6789</option>
+                    <option selected>建设银行 6222***1234</option> -->
                 </select>
             </div>
             <div class="item item-input">
                 <div class="input-label">
                     银行卡密码
                 </div>
-                <input type="password" placeholder="请输入密码"/>
+                <input type="password" ng-model="query.bank_pass" placeholder="请输入密码"/>
             </div>
             <div class="item item-input">
                 <div class="input-label">
                     期货余额
                 </div>
                 <div class="item-content-balance">
-                    234432
+                    {{future_balance}}
+                    <button class="button button-stable button-small" ng-click="query('FUTURE')">
+                        查询
+                    </button>
                 </div>
             </div>
             <div class="item item-input">
@@ -29,8 +36,8 @@
                     银行余额
                 </div>
                 <div class="item-content-balance">
-                    234432
-                    <button class="button button-stable button-small">
+                    {{bank_balance}}
+                    <button class="button button-stable button-small" ng-click="query('BANK')">
                         查询
                     </button>
                 </div>
@@ -39,17 +46,17 @@
                 <div class="input-label">
                     转账金额
                 </div>
-                <input type="text" placeholder="请输入转账金额"/>
+                <input type="number" ng-model='query.transfer_amount' placeholder="请输入转账金额"/>
             </div>
             <div class="item">
                 <div class="row">
                     <div class="col">
-                        <button class="button button-stable button-block">
+                        <button class="button button-stable button-block"  ng-click="transfer('IN')">
                             银行转期货
                         </button>
                     </div>
                     <div class="col">
-                        <button class="button button-stable button-block">
+                        <button class="button button-stable button-block" ng-click="transfer('OUT')">
                             期货转银行
                         </button>
                     </div>

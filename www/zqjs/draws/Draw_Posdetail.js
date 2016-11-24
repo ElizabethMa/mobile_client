@@ -1,47 +1,56 @@
 function draw_page_posdetail() {
 	if (DM.get_data("state.page") == "posdetail") {
-		var arr = location.hash.split('/');
-		if(arr.indexOf('posdetail') < 0){
-			return;
-		}
-		var insid = arr[3], posid = arr[4];
+		
+		var insid = DM.get_data('state.detail_ins_id');
+		var posid = DM.get_data('state.detail_pos_id');
 
 		if (posid == 'new') {
 
-			var positions = DM.get_data('positions');
+			var mapping = DM.get_data('mapping');
 
 			if(DM.get_data('session_id') && DM.get_data('state.req_id')){
 				var new_order_id = DM.get_data('session_id') + '!' + DM.get_data('state.req_id');
-
-				for(var pos in positions){
-					if(positions[pos].instrument_id == insid && positions[pos].orders){
-						var orders = positions[pos].orders;
-						for(var o in orders){
-							if(o == new_order_id){
-								console.log("有了新持仓" + pos)
-								location.href = "#/app/posdetail/" + insid + '/' + pos;
-								return;
-							}
-						}
+				if(mapping && mapping[new_order_id]){
+					var new_pos_id = mapping[new_order_id];
+					console.log("有了新持仓" + new_pos_id);
+					var position = DM.get_data('positions.' + new_pos_id);
+					if(position && position.position_id != null){
+						DM.update_data({state:{
+							'detail_ins_id': position.instrument_id,
+							'detail_pos_id': position.position_id
+						}});
 					}
+					
 				}
+
+				// for(var pos in positions){
+				// 	if(positions[pos].instrument_id == insid && positions[pos].orders){
+				// 		var orders = positions[pos].orders;
+				// 		for(var o in orders){
+				// 			if(o == new_order_id){
+				// 				console.log("有了新持仓" + pos)
+				// 				DM.update_data({state:{
+				// 					'detail_ins_id': insid,
+				// 					'detail_pos_id': pos
+				// 				}});
+				// 			}
+				// 		}
+				// 	}
+				// }
 			}
 		} else {
 			// 检查 position_id == null
 
 			if(DM.get_data('positions.' + posid + '.position_id') == null){
 				console.log("没有了持仓" + posid)
-				location.href = "#/app/posdetail/" + insid + '/new';
-				return;
+				DM.update_data({state:{
+					'detail_ins_id': insid,
+					'detail_pos_id': 'new'
+				}});
 			}
-
-			DM.run(function (posid, insid) {
-				return function () {
-					draw_page_posdetail_poslist(posid, insid)
-				};
-			}(posid, insid));
 		}
 
+		draw_page_posdetail_poslist();
 		draw_page_posdetail_content(posid, insid);
 
 
@@ -58,7 +67,7 @@ function draw_page_posdetail() {
 }
 
 function draw_page_posdetail_content(posid, insid) {
-	if (DM.get_data("state.page") == "posdetail" && DM.get_data("account_id")) {
+	if (DM.get_data("state.page") == "posdetail") {
 		var containers = document.querySelectorAll('.posdetail .detail');
 
 		var divs = document.querySelectorAll('.posdetail .detail .detail_msg');
@@ -110,15 +119,11 @@ function draw_page_posdetail_quote(insid, param) {
 	}
 }
 
-
-
 var cancel_order = function (session_id, order_id) {
 
 	navigator.notification.confirm(
 		'确认删除挂单?', // message
 		function(buttonIndex) {
-			console.log('You selected button ' + buttonIndex);
-
 			if (buttonIndex == 1) {
 				WS.send({
 					aid: "req_cancel_order", // 撤单请求
@@ -135,14 +140,28 @@ var cancel_order = function (session_id, order_id) {
 	);
 }
 
-function draw_page_posdetail_poslist(posid, insid) {
+function draw_page_posdetail_poslist() {
 	if (DM.get_data("state.page") == "posdetail") {
 		var container = document.querySelector('.posdetail .pos-boxes');
 
+		var insid = DM.get_data('state.detail_ins_id');
+		var posid = DM.get_data('state.detail_pos_id');
+
+		if(posid == "new"){
+			container.innerHTML = "";
+		}
+
 		var orders = DM.get_data("positions." + posid + ".orders");
 
-		var counts = orders ? Object.getOwnPropertyNames(orders).length : 0;
+		for (var order_id in orders) {
+			var order = orders[order_id];
+			if(order.order_id == null){
+				delete orders.order_id;
+			}
+		}
 
+		var counts = orders ? Object.getOwnPropertyNames(orders).length : 0;
+		
 		// TODO cell_height cell_width
 		if (container) {
 			var restHeight = parseInt(container.style.height);

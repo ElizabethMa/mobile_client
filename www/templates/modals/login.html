@@ -1,5 +1,5 @@
 <ion-modal-view class="login">
-    <ion-header-bar class="bar bar-dark">
+    <ion-header-bar class="bar bar-dark" align-title="center">
         <div class="buttons left">
             <button class="button button-open" ng-click="closeModal()">返回</button>
         </div>
@@ -9,8 +9,10 @@
         <div class="bg"></div>
         <div class="content">
             <div class="list header">
-                <img class="logo" src="img/logo.png"></img>
-                <h3>{{ login_params.type=='sim'?'模拟':'实盘' }}登录</h3>
+            
+                    <img class="logo" src="img/logo.png"></img>
+                    <h3>{{ login_params.type=='sim'?'模拟':'实盘' }}登录</h3>
+
                 <a ng-click="switchParams()">
                     切换到{{ login_params.type=='sim'?'实盘':'模拟' }}登录>>
                 </a>
@@ -46,7 +48,6 @@
                     <span class="input-label">实盘密码</span>
                     <input type="password" placeholder="请输入实盘密码"
                            autocomplete="off" name="act_password" required
-
                            ng-click="login_error=false"
                            ng-model="login_states.act_password">
                 </label>

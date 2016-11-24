@@ -1,6 +1,6 @@
 <ion-view view-title="{{ login_states.type=='sim'?'正在使用模拟环境':(login_states.type=='act'?'正在使用实盘环境':'未登录') }}" 
   class="userinfo">
-  <ion-content class="userinfo" scroll='false' ng-class="login_params.type">
+  <ion-content class="userinfo" ng-class="login_params.type">
     <div class="bg"></div>
     <!-- <div class="bar bar-header bar-dark">
       <button ng-click="$ionicGoBack()" nav-transition="none" class="button back-button button-clear header-item">
@@ -31,7 +31,7 @@
       <div class="row" ng-if="login_states.type!=='act'">
         <div class="col">
           <button class="left button button-block"
-                  onclick="window.location.replace('https://appficaos.cfmmc.com/indexnew?brokerId=0127&openType=9&checkBrokerIdFlag=false');" nav-transition="none" >
+                  ng-click="openAccount();">
             注册开户
           </button>
         </div>

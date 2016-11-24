@@ -135,32 +135,12 @@ define(['views/profileView', 'GS'], function (View, GS) {
 					});
 					//显示扩展字段
 					// 全部隐藏
-					$$("#user_ext_val1").hide();
-					$$("#user_ext_val1").remove();
-					$$("#user_ext_val2").hide();
-					$$("#user_ext_val2").remove();
-					$$("#user_ext_val3").hide();
-					$$("#user_ext_val3").remove();
-
-					// if(data.user_flag_val1) {
-					// 	$$("#user_ext_val1").show();
-					// } else {
-					// 	$$("#user_ext_val1").hide();
-					// 	$$("#user_ext_val1").remove();
-					// }
-					// if(data.user_flag_val2) {
-					// 	$$("#user_ext_val2").show();
-					// } else {
-					// 	$$("#user_ext_val2").hide();
-					// 	$$("#user_ext_val2").remove();
-					// }
-					// if(data.user_flag_val3) {
-					// 	$$("#user_ext_val3").show();
-					// } else {
-					// 	$$("#user_ext_val3").hide();
-					// 	$$("#user_ext_val3").remove();
-					// }
-
+					// $$("#user_ext_val1").hide();
+					// $$("#user_ext_val1").remove();
+					// $$("#user_ext_val2").hide();
+					// $$("#user_ext_val2").remove();
+					// $$("#user_ext_val3").hide();
+					// $$("#user_ext_val3").remove();
 
 					if(data.hyshow=='invisible'){
 						$$("#hy").hide();
@@ -279,7 +259,7 @@ define(['views/profileView', 'GS'], function (View, GS) {
 						"name": encodeURI(encodeURI(APP_profile.name)),
 						"code": APP_profile.code,
 						"ceraddr": encodeURI(encodeURI(APP_profile.ceraddr)),
-						"commaddr": encodeURI(encodeURI(APP_profile.commaddr)),
+						"commaddr": encodeURI(encodeURI((APP_profile.commaddr).replace(/[\r\n]/g,""))),
 						"postCode": APP_profile.postCode,
 						"career": APP_profile.careerCode,
 						"education": APP_profile.educationCode,
@@ -296,9 +276,9 @@ define(['views/profileView', 'GS'], function (View, GS) {
 						// "val1": $$("input[name=val1]").val(),
 						// "val2": $$("input[name=val2]").val(),
 						// "val3": $$("input[name=val3]").val()
-						// 修改 推荐人 姓名 编号
-						"val1": "信易",
-						"val2": "xinyi",
+						// 修改 val1 众期货 val2 居间人
+						"val1": "众期货",
+						"val2": "",
 						"val3": ""
 					},
 					success: function (data) {
@@ -414,7 +394,7 @@ define(['views/profileView', 'GS'], function (View, GS) {
 				"name"         : encodeURI(encodeURI(APP_profile.name)),
 				"code"         : APP_profile.code,
 				"ceraddr"      : encodeURI(encodeURI(APP_profile.ceraddr)), 
-				"commaddr"     : encodeURI(encodeURI(APP_profile.commaddr)), 
+				"commaddr"     : encodeURI(encodeURI((APP_profile.commaddr).replace(/[\r\n]/g,""))), 
 				"postCode"     : APP_profile.postCode,
 				"career"       : APP_profile.careerCode,
 				"education"    : APP_profile.educationCode,
@@ -475,7 +455,8 @@ define(['views/profileView', 'GS'], function (View, GS) {
 			khApp.alert("姓名不能为空");
 			return false;
 		} else if(!isUserName(APP_profile.name)){
-				khApp.alert("姓名不符合规范, 只能是中英文与数字");
+				//khApp.alert("姓名不符合规范, 只能是中英文与数字");
+			    khApp.alert("身份证姓名不符合规范");
 				return false;
 		}
 		//验证身份证
@@ -490,13 +471,13 @@ define(['views/profileView', 'GS'], function (View, GS) {
 			}
 		}
 		//验证身份证住址 
-		APP_profile.ceraddr = $$("textarea[name=cidAddr]").val();
+		/*APP_profile.ceraddr = $$("textarea[name=cidAddr]").val();
 		if(isBlank(APP_profile.ceraddr)){
 			khApp.alert("身份证住址不能为空");
 			 return false;
-		}
+		}*/
 		//验证联系地址
-		APP_profile.commaddr = $$("textarea[name=address]").val();
+		APP_profile.commaddr = $$("input[name=address]").val();
 		if(isBlank(APP_profile.commaddr)){
 			khApp.alert("联系地址不能为空");
 			 return false;

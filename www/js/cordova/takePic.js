@@ -17,8 +17,7 @@ var jtoJHandle = {
          navigator.camera.getPicture(cameraSuccess, cameraError, cameraOptions);
      },
     closeSJKH : function(){
-        // TODO 重启 APP?
-        navigator.app.exitApp();
+        window.history.back();
     },
     checkAppVersion: function(){
         return true;

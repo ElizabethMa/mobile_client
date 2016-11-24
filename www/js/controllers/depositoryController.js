@@ -1,5 +1,5 @@
 define(['views/depositoryView', 'GS'], function (View, GS) {
-
+	
 	var APP_thirdBank = {};
 	APP_thirdBank.resetbank = "/resetbank";
 	APP_thirdBank.pre = "/returnPwdset.do";
@@ -31,7 +31,8 @@ define(['views/depositoryView', 'GS'], function (View, GS) {
 	APP_thirdBank.econtractId = "";
 	APP_thirdBank.securityKind = "";
 	APP_thirdBank.flowKind = "";
-
+	APP_thirdBank.bandLengthFlag = false;
+	
 	var bindings = [{
 		element: '#depositoryGoBack',
 		event: 'click',
@@ -75,9 +76,9 @@ define(['views/depositoryView', 'GS'], function (View, GS) {
 				selectFalg=true;
 			}
 		}, 500);
-
+	
 	}
-
+	
 	function getShowCardNo(){
 		var cardNo=$$("input[name=cardNo]").val().replace(/\s/g,'');
 		var returnCardNo ="";
@@ -104,7 +105,7 @@ define(['views/depositoryView', 'GS'], function (View, GS) {
 		$$("#bankText").html(bankName);
 		$$("#bank_card_no").val(bank_card_no);
 	}
-
+	
 	function init() {
 		View.init({
 			bindings: bindings
@@ -136,6 +137,7 @@ define(['views/depositoryView', 'GS'], function (View, GS) {
 				}else{
 					khApp.alert(data.errorInfo);
 				}
+				getUserBankCards();
 			},
 			error: function(xhr) {
 				if(xhr.status == '0'){
@@ -159,7 +161,7 @@ define(['views/depositoryView', 'GS'], function (View, GS) {
 		reqCookie();
 		// End
 	}
-
+ 
 	function selectBank() {
 		var selectedOption = this.options[this.selectedIndex],
 			type = $$(selectedOption).data('type'),
@@ -190,7 +192,7 @@ define(['views/depositoryView', 'GS'], function (View, GS) {
 	// MadeByHJL 添加银行卡
 	function addBankCardToArray(bankCardNo){
 		// 输入验证
-
+		
 		// 银行卡号验证
 		var reg = /^[0-9]{12,19}$/;
 		if(!reg.test(APP_thirdBank.accountNo)){
@@ -198,16 +200,14 @@ define(['views/depositoryView', 'GS'], function (View, GS) {
 			$$('.depository-next-button').prop('disabled', false);
 			// $$('.depository-next-button').attr("placeholder","请输入正确的银行卡号");
 	        return false;
-		}
+		} 
 		// 效验银行网点APP_thirdBank.bankBranch
-		var re = /[^u4e00-u9fa5]/;
-		if(!APP_thirdBank.hasBankCardAdd){
-			if(!re.test(APP_thirdBank.bankBranch)) {
+		var re = /[^u4e00-u9fa5]/; 
+			if(!re.test(APP_thirdBank.bankBranch.trim())) {
 				khApp.alert("银行网点输入不正确，请重新输入");
 				$$('.depository-next-button').prop('disabled', false);
 				return false;
 			}
-		}
 		// 是否上传银行卡照片
 		var test = $$('#bankCardPicBlock').children('.page-content').length;
 		if(test == 0){
@@ -218,7 +218,7 @@ define(['views/depositoryView', 'GS'], function (View, GS) {
 		if(APP_thirdBank.isNeedBankPic){
 			var index = hasAExistedBankPic(APP_thirdBank.bankpinyin);
 			if(index==-1){
-				khApp.alert("请上传银行卡照片");
+				khApp.alert("请上传银行卡照片");	
 				return false;
 			}
 //			if(!APP_thirdBank.hasBankCardPic){
@@ -251,7 +251,7 @@ define(['views/depositoryView', 'GS'], function (View, GS) {
 			action2:function(){
 			}
 			});
-
+			
 		}else{
 			APP_thirdBank.bankCards.push(bank);
 			hasBankBranch();
@@ -260,22 +260,23 @@ define(['views/depositoryView', 'GS'], function (View, GS) {
 				bindings: bankcardBindings
 			});
 		}
-
+		
 // End 银行卡种类处理
 // APP_thirdBank.bankCards.push(bank);
 // resetBankMsg();
+		APP_thirdBank.bandLengthFlag=true;//更新信息
 		return true;
 	}
-
+	
 	function addBankCard(){
-
+		
 		APP_thirdBank.accountNo = $$("input[name=cardNo]").val().replace(/\s/g, '');
 		APP_thirdBank.bankBranch = $$("input[name=bankBranch]").val();
-
+		
 		return addBankCardToArray(APP_thirdBank.accountNo);
 	}
 // End
-
+	
 	// 提交
 	function bindBankSubmit(){
 		APP_thirdBank.accountNo = $$("input[name=cardNo]").val().replace(/\s/g, '');
@@ -289,13 +290,13 @@ define(['views/depositoryView', 'GS'], function (View, GS) {
 		var reg = /^[0-9]{12,19}$/;
 		if(!reg.test(APP_thirdBank.accountNo)){
 			khApp.alert("银行卡号输入不正确，请重新输入");
-			$$('.depository-next-button').prop('disabled', false);
+			$$('.depository-next-button').prop('disabled', false); 
 	        return ;
 		}
-
-
-
-
+		
+		
+		
+		
 	}
 	// 返回
 	function goBack() {
@@ -305,7 +306,7 @@ define(['views/depositoryView', 'GS'], function (View, GS) {
 		}else{
 			mainView.loadPage(APP_thirdBank.pre);
 		}
-
+		
 	}
 	// MadeByHJL
 	// 提交银行卡信息//改为添加银行卡，缓存本地6.15
@@ -359,10 +360,10 @@ define(['views/depositoryView', 'GS'], function (View, GS) {
 // });
 // }else{
 // uploadSelect(4);// 原生中4是银行卡
-
+    	
 // }
 	}
-
+	
 	function uploadSelect(picType) {
 		if(browser.versions.WeiXin){
 			 var images = {
@@ -373,7 +374,7 @@ define(['views/depositoryView', 'GS'], function (View, GS) {
 			wx.chooseImage({
 			    success: function (res) {
 					images.localId = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
-
+					
 					if (images.localId.length == 0) {
 						khApp.alert('请选择上传图片');
 						return;
@@ -387,11 +388,11 @@ define(['views/depositoryView', 'GS'], function (View, GS) {
 						isShowProgressTips: 1, // 默认为1，显示进度提示
 						success: function (res) {
 							images.serverId.push(res.serverId); // 返回图片的服务器端ID
-
+							
 							$$.ajax({
 								url: '/uploadOSSByWeiXin.do?rnd=' + new Date().getTime(),
 								type: 'POST',
-								async:false,
+								async:false, 
 								data: {
 									"media_id":images.serverId[0],
 									"picType":picType
@@ -409,31 +410,7 @@ define(['views/depositoryView', 'GS'], function (View, GS) {
 			    }
 			});
 		}else if(browser.versions.ios){	// iphone
-// 			var picTypeStr;
-// 			switch(picType){
-// 				case 0:
-// 					picTypeStr = "front";
-// 		  			break;
-// 				case 1:
-// 					picTypeStr = "back";
-// 		  			break;
-// 		  		case 2:
-// 		  			picTypeStr = "face";
-// 		  			break;
-// 		  		case 4:
-// 		  			picTypeStr = APP_thirdBank.bankpinyin+'Div'
-// // picTypeStr = "bank";
-// 		  			break;
-// 		  		case 99:
-// 		  			picTypeStr = "futureSign";
-// 		  			break;
-// 				default:
-// 					picTypeStr = "front";
-// 			}
-// 			window.location.href="objc://takePictures/?"+picTypeStr+"?"+APP_thirdBank.cookie + "?parsePicUrl_depository";
-			
 			var cameraSuccess = function(imageData){
-    //                 console.log('cameraSuccess result : ' + imageData);
                 var picTypeStr;
                 switch(picType){
                     case 0:
@@ -489,15 +466,13 @@ define(['views/depositoryView', 'GS'], function (View, GS) {
 
              navigator.camera.getPicture(cameraSuccess, cameraError, cameraOptions);
              khApp.showIndicator();
-
-
 		}else if (!isTlephone()&&browser.versions.Chrome) {
 			return mockTakePictures(picType);
 		}else{// 先改android:picType换成 APP_thirdBank.bankpinyin
 //			window.jtoJHandle.takePictures(APP_thirdBank.bankpinyin+'Div',APP_thirdBank.cookie);
-//			window.jtoJHandle.takePictures("parsePicUrl_depository",APP_thirdBank.bankpinyin+'Div',APP_thirdBank.cookie);// MadeByHJL
-				var cameraSuccess = function(imageData){
-    //                 console.log('cameraSuccess result : ' + imageData);
+			// window.jtoJHandle.takePictures("parsePicUrl_depository",APP_thirdBank.bankpinyin+'Div',APP_thirdBank.cookie);// MadeByHJL
+			
+			var cameraSuccess = function(imageData){
                 var picTypeStr;
                 switch(picType){
                     case 0:
@@ -551,11 +526,9 @@ define(['views/depositoryView', 'GS'], function (View, GS) {
 
            navigator.camera.getPicture(cameraSuccess, cameraError, cameraOptions);
            khApp.showIndicator();
-           // 原:picType
-		   // 改:APP_thirdBank.bankpinyin
 		}
 	}
-
+	
 	function reqCookie() {
 		khApp.showIndicator();
 		$$.ajax({
@@ -583,10 +556,10 @@ define(['views/depositoryView', 'GS'], function (View, GS) {
 	   		}
 		});
 	}
-
+	
 	/**
 	 * 解析图片 url
-	 *
+	 * 
 	 * @param {Object}
 	 *            json
 	 */
@@ -634,12 +607,18 @@ define(['views/depositoryView', 'GS'], function (View, GS) {
 			khApp.alert('请先添加至少一张银行卡');
 			return;
 		}
-		if(APP_thirdBank.isNeedBankPic){//MadeByHJL 6.24   10:00am  关闭银行卡照片上传下一步显示上传银行卡
-			if(APP_thirdBank.bankPicCode.length<=0){
-				khApp.alert('请至少上传一张银行卡照片');
-				return;
-			}
-		}//End
+		if(!APP_thirdBank.bandLengthFlag){
+			if(APP_thirdBank.isNeedBankPic){//MadeByHJL 6.24   10:00am  关闭银行卡照片上传下一步显示上传银行卡
+				if(APP_thirdBank.bankPicCode.length<=0){
+					khApp.alert('请更新银行卡信息');
+					return;
+				}
+			}else{
+				khApp.alert('请更新银行卡信息');
+	    		return;
+		}
+		}
+	    
 		if(!APP_thirdBank.hasBankCardAdd){
 			khApp.alert('请至少填写一张银行卡营业网点');
 			return;
@@ -651,13 +630,13 @@ define(['views/depositoryView', 'GS'], function (View, GS) {
 		},
 		btnText2:"取消",
 		action2:function(){
-
+			
 		}
 		});
-
+		
 	}
 	// End
-
+	
 	// 模拟上传图片
 	function mockTakePictures(picType) {
 		var picTypeStr;
@@ -704,7 +683,7 @@ define(['views/depositoryView', 'GS'], function (View, GS) {
 	   			khApp.alert(MESSAGE_TIMEOUT);
 	   		}
 		});
-
+		
 	}
 	// 提交添加
 	function submitOrNext(){
@@ -733,7 +712,7 @@ define(['views/depositoryView', 'GS'], function (View, GS) {
 			url: bindUrl,
 			type: 'POST',
 			timeout: 15000, // 超时时间设置，单位毫秒
-			data:{
+			data:{ 
 				bankCodes:bankCodes,
 				bankAccounts:bankAccounts,
 				bankBranchs:bankBranchs
@@ -802,7 +781,7 @@ define(['views/depositoryView', 'GS'], function (View, GS) {
 	// 清除银行块信息
 	function cleanBnakBlockMsg(){
 		APP_thirdBank.BankCode = "";
-		 $$("#bankText").html("");
+		 $$("#bankText").html("");		
 		 $$("input[name='cardNo']").val("");
 		 $$("input[name='bankBranch']").val("");
 		 View.cleanPhotoFront();
@@ -821,7 +800,7 @@ define(['views/depositoryView', 'GS'], function (View, GS) {
 		}
 		bank.remove();
 // if(code){//HJL_TAG 删除银行卡处理
-//
+//			
 // }
 		deletBankFromArray(code);
 		hasBankBranch();
@@ -862,18 +841,19 @@ define(['views/depositoryView', 'GS'], function (View, GS) {
 				var app_bankCode = APP_thirdBank.bankCards[i].bankCode;
 				if(app_bankCode==bankCode){
 					APP_thirdBank.bankCards.splice(i,1);
+					APP_thirdBank.bandLengthFlag = true;
 					return true;
 				}
 			}
 		}
 		return false;
-
+		
 	}
 	function initBankData(){
 		APP_thirdBank.bankCards = [];
 		APP_thirdBank.bankPicCode = [];
 	}
-
+	
 	// 获取已经绑定的银行卡信息
 	function getUserBankCards(){
 		khApp.showIndicator();
@@ -888,8 +868,8 @@ define(['views/depositoryView', 'GS'], function (View, GS) {
 					cleanBnakBlockMsg();
 					APP_thirdBank.bankCards = data.model.bank_account
 					View.bankCardsRender({
-						modell: data.model,
-						bindings: []
+						modell: APP_thirdBank.bankCards,
+						bindings: bankcardBindings
 					});
 				} else {
 					khApp.alert(data.errorInfo);

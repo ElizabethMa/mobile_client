@@ -1,0 +1,18 @@
+{
+    "android": {
+        "debug": {
+            "keystore": "./zhongqihuo-key.jks",
+            "storePassword": "zhongqihuo",
+            "alias": "zhongqihuo",
+            "password" : "zhongqihuo",
+            "keystoreType": ""
+        },
+        "release": {
+            "keystore": "./zhongqihuo-key.jks",
+            "storePassword": "zhongqihuo",
+            "alias": "zhongqihuo-release",
+            "password" : "zhongqihuo-release",
+            "keystoreType": ""
+        }
+    }
+}

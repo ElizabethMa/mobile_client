@@ -17,32 +17,65 @@
 	var CLOSING = 2;
 	var CLOSED = 3;
 
-	var note_index = 0;
+	var notification_index = 0;
 
-	function showNotifications(notifications) {
-		var msg = notifications[note_index].title + ' : ' + notifications[note_index].content;
+	function showNotifications(notifications, index) {
+		var msg = notifications[index].content;
+		var code = notifications[index].code;
+		var type = notifications[index].type;
 		// 如果账号在其他位置
-		//if(notifications[note_index].content == "账号在其他位置登录"){
-		//	reconnect = false;
-		//}
-		if (window.plugins) {
+		if (type == 'T' && window.plugins) {
 			window.plugins.toast.showWithOptions({
-					message: msg,
-					duration: "long",
-					position: "bottom",
-					addPixelsY: -40
-				},
-				function (a) {
-					console.log('toast success: ' + a);
-					note_index ++;
-				},
-				function (b) {
-					console.log('toast error: ' + b);
-					note_index ++;
-				}
-			)
+				message: msg,
+				duration: "long",
+				position: "bottom",
+				addPixelsY: -40
+			},
+			function (a) {
+				console.log('toast success: ' + a);
+			},
+			function (b) {
+				console.log('toast error: ' + b);
+			});
+		}
+		
+		if(type == 'N'){
+			if(cordova.plugins.notification){
+				cordova.plugins.notification.local.schedule({
+					id: ++notification_index,
+				    title: "众期货提醒您", // 默认 app name
+				    text: msg,
+				});
+			}
 		}
 
+		if(code == '1'){
+			reconnect = false;
+		}
+
+		if(code == '2'){
+			var arr = msg.split(':');
+			if(arr.length > 0){
+				var m = {};
+				m[arr[0]] = arr[1];
+				DM.update_data({
+					'mapping' : m
+				});
+			}
+		}
+
+		if(notifications[++index]){
+			showNotifications(notifications, index)
+		};
+	}
+
+	function reinit(url){
+		if (typeof ws === 'undefined') {
+			init(url);
+		} else {
+			server_url = url;
+			ws.close();
+		}
 	}
 
 	function init(url) {
@@ -57,8 +90,8 @@
 				for (var i = 0; i < decoded.data.length; i++) {
 					var temp = decoded.data[i];
 					if (temp.notify) {
-						note_index = 0;
-						showNotifications(temp.notify);
+						console.log(JSON.stringify(temp.notify) );
+						showNotifications(temp.notify, 0);
 
 					}
 					DM.update_data(temp);
@@ -100,21 +133,6 @@
 					else break;
 				}
 			}
-
-			//var a = true;
-			//setInterval(function(){
-			//	if (isReady()) ws.send('{"aid":"peek_message"}');
-				//if (a) {
-				//	ws.send('{"aid":"subscribe_quote","ins_type":"CUSTOM","ins_list":"T1612"}');
-				//	a = !a;
-				//}else{
-				//	ws.send('{"aid":"subscribe_quote","ins_type":"CUSTOM","ins_list":"IF1702"}');
-				//	a = !a;
-				//}
-			//}, 1000);
-
-			// send peek_message
-			//if (isReady()) ws.send('{"aid":"peek_message"}');
 		};
 	}
 
@@ -136,6 +154,7 @@
 	this.WS = {
 		init: init,
 		send: send,
+		reinit: reinit,
 		getReqid: function () {
 			return (req_id++).toString(36);
 		}

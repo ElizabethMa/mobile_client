@@ -2,8 +2,8 @@
 
 angular.module('starter', ['ionic', 'datetime', 'ionic-datepicker', 'starter.controllers', 'starter.services'])
 
-	.run(['$rootScope', '$state', '$urlRouter', '$location', '$ionicModal', '$ionicLoading', '$ionicHistory', '$ionicPlatform', 'LoginService', 'CustomListService', '$http',
-		function ($rootScope, $state, $urlRouter, $location, $ionicModal, $ionicLoading, $ionicHistory, $ionicPlatform, LoginService, CustomListService, $http) {
+	.run(['$rootScope', '$state', '$urlRouter', '$timeout', '$location', '$ionicModal', '$ionicLoading', '$ionicHistory', '$ionicPlatform', 'LoginService', 'CustomListService', '$http',
+		function ($rootScope, $state, $urlRouter, $timeout, $location, $ionicModal, $ionicLoading, $ionicHistory, $ionicPlatform, LoginService, CustomListService, $http) {
 			// datamanager init
 			DM.init(draw_app);
 			CustomListService.init();
@@ -62,19 +62,22 @@ angular.module('starter', ['ionic', 'datetime', 'ionic-datepicker', 'starter.con
 			// 初始化生成 $rootScope.loginModal $rootScope.registerModal $rootScope.changepwdModal
 			$ionicModal.fromTemplateUrl('templates/modals/login.html', {
 				scope: $rootScope,
-				animation: 'slide-in-up'
+				animation: 'slide-in-up',
+				hardwareBackButtonClose: false
 			}).then(function (modal) {
 				$rootScope.loginModal = modal;
 			});
 			$ionicModal.fromTemplateUrl('templates/modals/register.html', {
 				scope: $rootScope,
-				animation: 'slide-in-up'
+				animation: 'slide-in-up',
+				hardwareBackButtonClose: false
 			}).then(function (modal) {
 				$rootScope.registerModal = modal;
 			});
 			$ionicModal.fromTemplateUrl('templates/modals/changepwd.html', {
 				scope: $rootScope,
-				animation: 'slide-in-up'
+				animation: 'slide-in-up',
+				hardwareBackButtonClose: false
 			}).then(function (modal) {
 				$rootScope.changepwdModal = modal;
 			});
@@ -207,9 +210,9 @@ angular.module('starter', ['ionic', 'datetime', 'ionic-datepicker', 'starter.con
 
 						// 重连服务器
 						if (d["broker_id"] == 'sim') {
-							WS.init(SETTING.sim_server_url);
+							WS.reinit(SETTING.sim_server_url);
 						} else {
-							WS.init(SETTING.act_server_url);
+							WS.reinit(SETTING.act_server_url);
 						}
 
 						$ionicLoading.hide().then(function () {
@@ -282,6 +285,7 @@ angular.module('starter', ['ionic', 'datetime', 'ionic-datepicker', 'starter.con
 			$rootScope.openAccount = function () {
 				// 东方期货 0127  浏览器&registerWay=2
 				window.location.href = 'https://appficaos.cfmmc.com/indexnew?brokerId=0127&openType=9&checkBrokerIdFlag=false';
+				// window.location.href = 'https://appficaos.cfmmc.com/indexnew';
 
 			}
 
@@ -323,16 +327,31 @@ angular.module('starter', ['ionic', 'datetime', 'ionic-datepicker', 'starter.con
 			$ionicPlatform.ready(function () {
 				// Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
 				// for form inputs)
-//				if (window.cordova && window.cordova.plugins.Keyboard) {
-//					cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-//					cordova.plugins.Keyboard.disableScroll(true);
-//
-//				}
-//				if (window.StatusBar) {
-//					// org.apache.cordova.statusbar required
-//					StatusBar.styleDefault();
-//				}
+				if (window.cordova && window.cordova.plugins.Keyboard) {
+					cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+					cordova.plugins.Keyboard.disableScroll(true);
+				}
+				if (window.StatusBar) {
+					// org.apache.cordova.statusbar required
+					StatusBar.styleDefault();
+				}
 			});
+
+
+			// $rootScope.deregisterBackAction = null; 
+			// // 键盘显示时，Android 返回键 donothing
+			// window.addEventListener('native.keyboardshow', function(){
+			// 	$rootScope.deregisterBackAction = $ionicPlatform.registerBackButtonAction(function(e){
+			// 	    e.preventDefault();
+			// 	    return false;
+			// 	}, 201);
+			// });
+			// // 键盘收起时，Android 返回键 回到默认状态
+			// window.addEventListener('native.keyboardhide', function(){
+			// 	$timeout(function() {
+			// 		$rootScope.deregisterBackAction();
+			// 	}, 100);
+			// });
 		}
 	])
 
@@ -349,12 +368,12 @@ angular.module('starter', ['ionic', 'datetime', 'ionic-datepicker', 'starter.con
 				weeksList: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"],
 				monthsList: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
 				templateType: 'popup',
-				from: new Date(2012, 8, 1),
+				from: new Date(2010, 1, 1),
 				to: new Date(),
 				showTodayButton: true,
 				dateFormat: 'yyyy MM dd',
 				closeOnSelect: false,
-				disableWeekdays: []
+				disableWeekdays: [0, 6]
 			};
 			ionicDatePickerProvider.configDatePicker(datePickerObj);
 
@@ -409,9 +428,9 @@ angular.module('starter', ['ionic', 'datetime', 'ionic-datepicker', 'starter.con
 					}
 				})
 
-				// 交易详情
 				.state('app.posdetail', {
-					url: '/posdetail/:insid/:posid',
+					url: '/posdetail',
+					cache: false,
 					templateUrl: 'templates/posdetail.html',
 					controller: 'PosdetailCtrl'
 				})
@@ -451,23 +470,19 @@ angular.module('starter', ['ionic', 'datetime', 'ionic-datepicker', 'starter.con
 
 			$ionicConfigProvider.views.maxCache(5);
 			$ionicConfigProvider.views.swipeBackEnabled(false);
+			$ionicConfigProvider.views.transition('none');
+			$ionicConfigProvider.navBar.alignTitle('center');
 
 			// note that you can also chain configs
-			$ionicConfigProvider.backButton.text('返回').icon('ion-chevron-left');
+			$ionicConfigProvider.backButton.text('');
+			$ionicConfigProvider.backButton.icon('ion-ios-arrow-thin-left');
+			$ionicConfigProvider.backButton.previousTitleText(false)
 
-			$ionicConfigProvider.platform.ios.tabs.style('standard');
-			$ionicConfigProvider.platform.ios.tabs.position('bottom');
-			$ionicConfigProvider.platform.android.tabs.style('standard');
-			$ionicConfigProvider.platform.android.tabs.position('bottom');
+			$ionicConfigProvider.tabs.style('standard');
+			$ionicConfigProvider.tabs.position('bottom');
 
-			$ionicConfigProvider.platform.ios.navBar.alignTitle('center');
-			$ionicConfigProvider.platform.android.navBar.alignTitle('center');
-
-			$ionicConfigProvider.platform.ios.backButton.previousTitleText('').icon('ion-ios-arrow-thin-left');
-			$ionicConfigProvider.platform.android.backButton.previousTitleText('').icon('ion-android-arrow-back');
-
-			$ionicConfigProvider.platform.ios.views.transition('ios');
-			$ionicConfigProvider.platform.android.views.transition('android');
+			// $ionicConfigProvider.platform.ios.backButton.previousTitleText('').icon('ion-ios-arrow-thin-left');
+			// $ionicConfigProvider.platform.android.backButton.previousTitleText('').icon('ion-android-arrow-back');
 
 		}
 	])
@@ -552,8 +567,9 @@ angular.module('starter', ['ionic', 'datetime', 'ionic-datepicker', 'starter.con
 			link: function (scope, ele, attrs) {
 				var cell_height = $rootScope.$settings.posdetail_cell_height;
 				var contentHeight = ele[0].parentElement.clientHeight;
+				var headerHeight = 44; // header height
 				var listHeight = ele[0].parentElement.querySelector('.list').clientHeight;
-				var restHeight = contentHeight  - listHeight;
+				var restHeight = contentHeight - headerHeight - listHeight;
 				
 				var rowNum = Math.floor(restHeight / cell_height);
 
