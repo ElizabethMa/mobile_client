@@ -54,10 +54,10 @@
     <plugin name="cordova-plugin-statusbar" spec="~2.2.0" />
     <plugin name="cordova-plugin-x-toast" spec="~2.5.2" />
     <plugin name="cordova-plugin-dialogs" spec="~1.3.0" />
-    <plugin name="com.cordova.plugin.CertPlugin" spec="/Users/yanqiong/Downloads/CordovaPlugins/cordova-cert" />
     <engine name="android" spec="~6.0.0" />
     <plugin name="de.appplant.cordova.plugin.local-notification" spec="https://github.com/katzer/cordova-plugin-local-notifications" />
-    <plugin name="com.cordova.plugin.AnyChatPlugin" spec="/Users/yanqiong/Downloads/CordovaPlugins/cordova-anychat" />
     <plugin name="cordova-plugin-splashscreen" spec="https://github.com/apache/cordova-plugin-splashscreen.git" />
     <plugin name="ionic-plugin-keyboard" spec="~2.2.1" />
+    <plugin name="cordova-plugin-certificates" spec="https://github.com/ElizabethMa/CertPlugin.git" />
+    <plugin name="cordova-plugin-anychat" spec="https://github.com/ElizabethMa/AnychatPlugin.git" />
 </widget>
