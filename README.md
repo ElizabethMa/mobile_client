@@ -7,6 +7,8 @@
 
 ## service worker
 
+## framework7
+
 ## 运行脚本
 
 ```

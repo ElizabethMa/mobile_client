@@ -371,10 +371,16 @@ public class SystemWebViewClient extends WebViewClient {
         try {
             if (url.contains("cordova")){
                 //local path
-                String filePath = url.replace("https://appficaos.cfmmc.com","www");
+                String filePath = null;
+                if(url.contains("https://appficaos.cfmmc.com")){
+                    filePath = url.replace("https://appficaos.cfmmc.com","www");
+                }else if(url.contains("http://api.shinnytech.com")){
+                    filePath = url.replace("http://api.shinnytech.com/web","www");
+                }
                 return getJSWebResourceResponseFromAsset(view,filePath);
             } else if(
                     url.contains("profileController")
+                    || url.contains("loginController")
                     || url.contains("collectController")
                     || url.contains("depositoryController")
                     || url.contains("videoController")
