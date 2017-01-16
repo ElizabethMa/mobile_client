@@ -1,12 +1,11 @@
-# shinny_mobile 文档
+# 文档
 
 ## 安装环境
 
-```
-$ cordova -v  
++ node, npm, cordova
++ android SDK, ios
 
-// 6.4.0
-```
+## service worker
 
 ## 运行脚本
 
